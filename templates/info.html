@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Compression Metrics Explained</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Times New Roman', serif;
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #f4f4f4, #e0e0e0);
+            color: #333;
+        }
+
+        h1, h2, h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        h2 {
+            font-size: 2rem;
+            border-bottom: 2px solid #34495e;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            color: #34495e;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .metric {
+            margin-bottom: 40px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .metric:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .metric p {
+            margin: 15px 0;
+            font-size: 1.1rem;
+            color: #555;
+        }
+
+        .metric ul {
+            margin: 15px 0 15px 30px;
+            list-style-type: disc;
+            color: #555;
+        }
+
+        .metric ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 0.9rem;
+            color: #777;
+        }
+
+        /* MathJax Styling */
+        .math {
+            font-size: 1.2rem;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.75rem;
+            }
+
+            h3 {
+                font-size: 1.25rem;
+            }
+
+            .container {
+                padding: 20px;
+                margin: 20px;
+            }
+
+            .metric {
+                padding: 15px;
+            }
+
+            .metric p {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.75rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            h3 {
+                font-size: 1.1rem;
+            }
+
+            .container {
+                padding: 15px;
+                margin: 10px;
+            }
+
+            .metric {
+                padding: 10px;
+            }
+
+            .metric p {
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+    <!-- MathJax Script -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Image Compression Metrics Explained</h1>
+        <p>Image compression metrics are used to evaluate the performance, efficiency, and quality of compressed images. Below is a detailed explanation of key metrics, including their definitions, ideal values, acceptable ranges, and best-case scenarios.</p>
+
+        <div class="metric">
+            <h2>1. Mean Squared Error (MSE)</h2>
+            <p><strong>Definition:</strong> Measures the average squared difference between the pixel values of the original and compressed images. It quantifies the total error introduced by compression.</p>
+            <p><strong>Formula:</strong> <span class="math">\[ MSE = \frac{1}{MN} \sum_{i=0}^{M-1} \sum_{j=0}^{N-1} [I(i,j) - K(i,j)]^2 \]</span></p>
+            <p><strong>Ideal Value:</strong> 0 (no error, perfect reconstruction).</p>
+            <p><strong>Acceptable Range:</strong> Depends on the application. For general purposes, MSE values below 100 are often acceptable, but this varies based on image content and use case.</p>
+            <p><strong>Best Case:</strong> Lower values are better. MSE values close to 0 indicate minimal distortion.</p>
+            <p><strong>Insights:</strong> MSE is sensitive to large errors, so even a few poorly compressed pixels can significantly increase the MSE.</p>
+        </div>
+
+        <div class="metric">
+            <h2>2. Peak Signal-to-Noise Ratio (PSNR)</h2>
+            <p><strong>Definition:</strong> Measures the quality of the compressed image relative to the original, expressed in decibels (dB). It is derived from the MSE.</p>
+            <p><strong>Formula:</strong> <span class="math">\[ PSNR = 10 \cdot \log_{10} \left( \frac{MAX_I^2}{MSE} \right) \]</span>, where \( MAX_I \) is the maximum pixel value (e.g., 255 for 8-bit images).</p>
+            <p><strong>Ideal Value:</strong> Infinity (no noise, perfect reconstruction).</p>
+            <p><strong>Acceptable Range:</strong> 
+                <ul>
+                    <li>30 dB to 40 dB: Moderate quality, acceptable for many applications.</li>
+                    <li>40 dB to 50 dB: Good to excellent quality.</li>
+                    <li>Above 50 dB: Near-lossless or lossless compression.</li>
+                </ul>
+            </p>
+            <p><strong>Best Case:</strong> Higher values are better. PSNR above 40 dB is generally considered good for most applications.</p>
+            <p><strong>Insights:</strong> PSNR is widely used but may not always align with human perception of quality.</p>
+        </div>
+
+        <div class="metric">
+            <h2>3. Structural Similarity Index (SSIM)</h2>
+            <p><strong>Definition:</strong> Measures perceptual similarity between the original and compressed images based on luminance, contrast, and structure.</p>
+            <p><strong>Formula:</strong> <span class="math">\[ SSIM(x, y) = \frac{(2\mu_x\mu_y + C1)(2\sigma_{xy} + C2)}{(\mu_x^2 + \mu_y^2 + C1)(\sigma_x^2 + \sigma_y^2 + C2)} \]</span></p>
+            <p><strong>Ideal Value:</strong> 1 (perfect similarity).</p>
+            <p><strong>Acceptable Range:</strong> 
+                <ul>
+                    <li>0.9 to 1: Excellent perceptual quality.</li>
+                    <li>0.8 to 0.9: Good quality, minor perceptible differences.</li>
+                    <li>0.7 to 0.8: Moderate quality, noticeable but acceptable differences.</li>
+                </ul>
+            </p>
+            <p><strong>Best Case:</strong> Values closer to 1 are better. SSIM is more aligned with human perception than PSNR.</p>
+            <p><strong>Insights:</strong> SSIM is particularly useful for evaluating perceptual quality in applications like streaming and social media.</p>
+        </div>
+
+        <div class="metric">
+            <h2>4. Compression Ratio (CR)</h2>
+            <p><strong>Definition:</strong> The ratio of the size of the original image to the size of the compressed image.</p>
+            <p><strong>Formula:</strong> <span class="math">\[ CR = \frac{\text{Size of Original Image}}{\text{Size of Compressed Image}} \]</span></p>
+            <p><strong>Ideal Value:</strong> Depends on the application. Higher values indicate more efficient compression.</p>
+            <p><strong>Acceptable Range:</strong> 
+                <ul>
+                    <li>Lossless Compression: CR around 2 to 3.</li>
+                    <li>Lossy Compression: CR can range from 5 to 50 or higher, depending on the desired quality.</li>
+                </ul>
+            </p>
+            <p><strong>Best Case:</strong> Higher values are better for storage and transmission efficiency, but they may compromise quality.</p>
+            <p><strong>Insights:</strong> A balance between CR and quality is crucial. High CR with acceptable quality is ideal.</p>
+        </div>
+    </div>
+</body>
+</html>

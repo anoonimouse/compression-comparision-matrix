@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Comparison Tool</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+        body { background-color: #f4f4f4; }
+        .container { max-width: 800px; margin-top: 30px; }
+        .image-preview { width: 100%; height: auto; border: 2px solid #ddd; padding: 5px; background: white; }
+        .result-box { padding: 20px; background: white; border-radius: 8px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); }
+        .metric { font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="text-center">Image Comparison Tool</h2>
+        <form id="upload-form" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label class="form-label">Original Image</label>
+                <input type="file" class="form-control" name="original" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Compressed Image</label>
+                <input type="file" class="form-control" name="compressed" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Compare</button>
+        </form>
+        <div id="results" class="mt-4 result-box" style="display: none;">
+            <h4 class="text-center">Comparison Results</h4>
+            <div class="row">
+                <div class="col-md-6 text-center">
+                    <h5>Original Image</h5>
+                    <img id="original-img" class="image-preview" src="" alt="Original">
+                    <p><span class="metric">Name:</span> <span id="original-name"></span></p>
+                    <p><span class="metric">Resolution:</span> <span id="original-resolution"></span></p>
+                    <p><span class="metric">Size:</span> <span id="original-size"></span> KB</p>
+                </div>
+                <div class="col-md-6 text-center">
+                    <h5>Compressed Image</h5>
+                    <img id="compressed-img" class="image-preview" src="" alt="Compressed">
+                    <p><span class="metric">Name:</span> <span id="compressed-name"></span></p>
+                    <p><span class="metric">Resolution:</span> <span id="compressed-resolution"></span></p>
+                    <p><span class="metric">Size:</span> <span id="compressed-size"></span> KB</p>
+                </div>
+            </div>
+            <hr>
+            <p><span class="metric">MSE:</span> <span id="mse"></span></p>
+            <p><span class="metric">PSNR:</span> <span id="psnr"></span> dB</p>
+            <p><span class="metric">SSIM:</span> <span id="ssim"></span></p>
+            <p><span class="metric">Compression Ratio:</span> <span id="compression-ratio"></span></p>
+            <p><span class="metric">Percentage Compression:</span> <span id="percentage-compression"></span>%</p>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#upload-form').on('submit', function(event) {
+                event.preventDefault();
+                let formData = new FormData(this);
+                $.ajax({
+                    url: '/compare',
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function(response) {
+                        $('#original-img').attr('src', response.original_url);
+                        $('#compressed-img').attr('src', response.compressed_url);
+                        $('#original-name').text(response.original_name);
+                        $('#compressed-name').text(response.compressed_name);
+                        $('#original-resolution').text(response.original_resolution);
+                        $('#compressed-resolution').text(response.compressed_resolution);
+                        $('#original-size').text(response.original_size);
+                        $('#compressed-size').text(response.compressed_size);
+                        $('#mse').text(response.mse);
+                        $('#psnr').text(response.psnr);
+                        $('#ssim').text(response.ssim);
+                        $('#compression-ratio').text(response.compression_ratio);
+                        $('#percentage-compression').text(response.percentage_compression);
+                        $('#results').show();
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
